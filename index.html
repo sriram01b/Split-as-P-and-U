@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Split as P and U</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/handsontable@9.0.0/dist/handsontable.full.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        input {
+            margin-bottom: 10px;
+            padding: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #hot {
+            margin-top: 20px;
+            height: 400px;
+            overflow: auto;
+        }
+    </style>
+</head>
+<body>
+    <form id="split-form">
+        <label for="value">Enter the value:</label>
+        <input type="text" id="value" required>
+        <button type="button" onclick="splitPU()">Generate P and U</button>
+    </form>
+
+    <div id="hot"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/handsontable@9.0.0/dist/handsontable.full.min.js"></script>
+    <script>
+        function splitPU() {
+            var inputValue = document.getElementById("value").value;
+
+            if (!isNaN(inputValue)) {
+                var resultData = [];
+
+                for (var p = 3; p < inputValue; p++) {
+                    if (![1, 2, 4, 5].includes(p) && ![1, 2, 3, 4, 5, 6, 7, 8, 10].includes(inputValue - p)) {
+                        resultData.push([p, inputValue - p]);
+                    }
+                }
+
+                renderTable(resultData);
+            } else {
+                alert("Invalid input. Please enter a valid integer.");
+            }
+        }
+
+        function renderTable(data) {
+            var container = document.getElementById("hot");
+
+            var hot = new Handsontable(container, {
+                data: data,
+                colHeaders: ['P', 'U'],
+                rowHeaders: false, // Hide row numbers
+                stretchH: 'all',
+                contextMenu: true,
+                manualColumnResize: true,
+                manualRowResize: true,
+                height: 400,
+                width: '100%',
+            });
+        }
+    </script>
+</body>
+</html>
