@@ -51,7 +51,8 @@
 
         #hot {
             margin-top: 20px;
-            height: 400px;
+            height: auto;
+            max-height: 400px;
             overflow: auto;
         }
     </style>
@@ -93,10 +94,10 @@
                 colHeaders: ['P', 'U'],
                 rowHeaders: false, // Hide row numbers
                 stretchH: 'all',
-                contextMenu: true,
                 manualColumnResize: true,
                 manualRowResize: true,
-                height: 400,
+                height: 'auto',
+                maxRows: 20, // Maximum rows to display
                 width: '100%',
             });
         }
