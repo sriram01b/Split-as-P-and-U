@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Split as P and U</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/handsontable@9.0.0/dist/handsontable.full.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -49,11 +48,25 @@
             background-color: #45a049;
         }
 
-        #hot {
+        #output-table {
             margin-top: 20px;
-            height: auto;
             max-height: 400px;
-            overflow: auto;
+            overflow-y: auto;
+            width: 100%;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th, td {
+            padding: 8px;
         }
     </style>
 </head>
@@ -64,42 +77,37 @@
         <button type="button" onclick="splitPU()">Generate P and U</button>
     </form>
 
-    <div id="hot"></div>
+    <div id="output-table"></div>
 
-    <script src="https://cdn.jsdelivr.net/npm/handsontable@9.0.0/dist/handsontable.full.min.js"></script>
     <script>
         function splitPU() {
             var inputValue = document.getElementById("value").value;
 
             if (!isNaN(inputValue)) {
-                var resultData = [];
+                var resultHtml = '<table>';
+                resultHtml += '<thead><tr><th>P</th><th>U</th></tr></thead>';
+                resultHtml += '<tbody>';
 
-                for (var p = 3; p < inputValue; p++) {
-                    if (![1, 2, 4, 5].includes(p) && ![1, 2, 3, 4, 5, 6, 7, 8, 10].includes(inputValue - p)) {
-                        resultData.push([p, inputValue - p]);
+                var notP = [1, 2, 4, 5];
+                var notU = [1, 2, 3, 4, 5, 6, 7, 8, 10];
+                var p = 3;
+
+                while (p < inputValue) {
+                    if (!notP.includes(p)) {
+                        var u = inputValue - p;
+                        if (!notU.includes(u)) {
+                            resultHtml += '<tr><td>' + p + '</td><td>' + u + '</td></tr>';
+                        }
                     }
+                    p++;
                 }
 
-                renderTable(resultData);
+                resultHtml += '</tbody></table>';
+
+                document.getElementById("output-table").innerHTML = resultHtml;
             } else {
                 alert("Invalid input. Please enter a valid integer.");
             }
-        }
-
-        function renderTable(data) {
-            var container = document.getElementById("hot");
-
-            var hot = new Handsontable(container, {
-                data: data,
-                colHeaders: ['P', 'U'],
-                rowHeaders: false, // Hide row numbers
-                stretchH: 'all',
-                manualColumnResize: true,
-                manualRowResize: true,
-                height: 'auto',
-                maxRows: 20, // Maximum rows to display
-                width: '100%',
-            });
         }
     </script>
 </body>
